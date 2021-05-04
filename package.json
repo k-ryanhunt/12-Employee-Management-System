@@ -1,0 +1,17 @@
+{
+  "name": "top-5000-songs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "TopSongsCode.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "inquirer": "^6.5.2",
+    "mysql": "^2.16.0",
+    "node": "^16.0.0"
+  }
+}
