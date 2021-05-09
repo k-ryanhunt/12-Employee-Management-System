@@ -1,14 +1,14 @@
 const { prompt } = require("inquirer");
-const mysql = require('mysql');
-const db = require("./db/employeeMS")
-require('console.table');
+const mysql = require("mysql");
+const db = require("./db/employeeMS");
+require("console.table");
 
 const connection = mysql.createConnection({
-  host: 'localhost',
+  host: "localhost",
   port: 3306,
-  user: 'root',
-  password: 'Ch@rlie10311989',
-  database: 'employeesDB'
+  user: "root",
+  password: "Ch@rlie10311989",
+  database: "employeesDB",
 });
 
 const start = async () => {
@@ -52,11 +52,10 @@ const start = async () => {
   }
 };
 
-const viewEmployees = async () => {
-  const employees = await db.viewEmployees();
-  console.log("\n");
-  console.table(employees);
-  start();
+const viewEmployees = () => {
+  return this.connection.query(
+    "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;"
+  );
 };
 
 const viewRoles = async () => {
@@ -87,7 +86,6 @@ const addEmployee = async () => {
     },
   ]);
 
-
   const { roleID } = await prompt({
     type: "list",
     name: "roleID",
@@ -99,20 +97,26 @@ const addEmployee = async () => {
       "Product Designer",
     ],
   });
+  switch (role) {
+    case "Senior Developer":
+      break;
+    case "Junior Developer":
+      break;
+    case "Project Manager":
+      break;
+    case "Product Designer":
+      break;
+    default:
+      return exit();
+  }
 
   employee.role_id = roleID;
-
 
   const { managerID } = await prompt({
     type: "list",
     name: "managerID",
     message: "Who is the new employee's manager?",
-    choices: [
-      "Abby Adams",
-      "Barbara Bobs",
-      "Carly Charles",
-      "Denise Dennis",
-    ],
+    choices: ["Abby Adams", "Barbara Bobs", "Carly Charles", "Denise Dennis"],
   });
 
   employee.manager_id = managerID;
