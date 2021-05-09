@@ -1,6 +1,15 @@
 const { prompt } = require("inquirer");
-const db = require("./db")
+const mysql = require('mysql');
+const db = require("./db/employeeMS")
 require('console.table');
+
+const connection = mysql.createConnection({
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: 'Ch@rlie10311989',
+  database: 'employeesDB'
+});
 
 const start = async () => {
   const { task } = await prompt({
@@ -12,7 +21,6 @@ const start = async () => {
       "View All Roles",
       "View All Departments",
       "Add Employee",
-      "Add Role",
       "Add Department",
       "Update Employee Role",
       "Exit",
@@ -30,9 +38,6 @@ const start = async () => {
       break;
     case "Add Employee":
       addEmployee();
-      break;
-    case "Add Role":
-      addRole();
       break;
     case "Add Department":
       addDepartment();
@@ -70,7 +75,6 @@ const viewDepartments = async () => {
 
 const addEmployee = async () => {
   const roles = await db.viewRoles();
-  const employees = await db.viewEmployees();
 
   const employee = await prompt([
     {
@@ -83,32 +87,32 @@ const addEmployee = async () => {
     },
   ]);
 
-  const roleChoices = roles.map(({ id, title }) => ({
-    name: title,
-    value: id,
-  }));
 
   const { roleID } = await prompt({
     type: "list",
     name: "roleID",
-    message: "What is the new employee's job?",
-    choices: roleChoices,
+    message: "What is the new employee's role?",
+    choices: [
+      "Senior Developer",
+      "Junior Developer",
+      "Project Manager",
+      "Product Designer",
+    ],
   });
 
   employee.role_id = roleID;
 
-  const managerChoices = employees.map(({ id, first_name, last_name }) => ({
-    name: `${first_name} ${last_name}`,
-    value: id,
-  }));
-
-  managerChoices.unshift({ name: "None", value: null });
 
   const { managerID } = await prompt({
     type: "list",
     name: "managerID",
     message: "Who is the new employee's manager?",
-    choices: managerChoices,
+    choices: [
+      "Abby Adams",
+      "Barbara Bobs",
+      "Carly Charles",
+      "Denise Dennis",
+    ],
   });
 
   employee.manager_id = managerID;
@@ -120,8 +124,6 @@ const addEmployee = async () => {
 
   start();
 };
-
-const addRole = async () => {};
 
 const addDepartment = async () => {
   const department = await prompt({
@@ -143,3 +145,8 @@ const exit = () => {
 };
 
 start();
+
+connection.connect((err) => {
+  if (err) throw err;
+  console.log(`Connected as ID ${connection.threadId}\n`);
+});
