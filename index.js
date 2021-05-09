@@ -60,9 +60,9 @@ const viewEmployees = async () => {
 };
 
 const viewRoles = async () => {
-  const jobs = await db.viewRoles();
+  const roles = await db.viewRoles();
   console.log("\n");
-  console.table(jobs);
+  console.table(roles);
   start();
 };
 
