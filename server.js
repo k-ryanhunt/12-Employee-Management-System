@@ -46,21 +46,21 @@ const start = async () => {
       updateEmployee();
       break;
     case "Exit":
+      exit();
       break;
     default:
-      return exit();
+      return;
   }
 };
 
-const viewEmployees = () => {
-  return this.connection.query(
-    "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;"
-  );
+const viewEmployees = async () => {
+  const employee = await db.viewEmployees();
+  console.table(employee);
+  start();
 };
 
 const viewRoles = async () => {
   const roles = await db.viewRoles();
-  console.log("\n");
   console.table(roles);
   start();
 };
@@ -86,18 +86,20 @@ const addEmployee = async () => {
     },
   ]);
 
-  const { roleID } = await prompt({
-    type: "list",
-    name: "roleID",
-    message: "What is the new employee's role?",
-    choices: [
-      "Senior Developer",
-      "Junior Developer",
-      "Project Manager",
-      "Product Designer",
-    ],
-  });
-  switch (role) {
+  const { roleID } = await prompt([
+    {
+      type: "list",
+      name: "roleID",
+      message: "What is the new employee's role?",
+      choices: [
+        "Senior Developer",
+        "Junior Developer",
+        "Project Manager",
+        "Product Designer",
+      ],
+    },
+  ]);
+  switch (roles) {
     case "Senior Developer":
       break;
     case "Junior Developer":
@@ -107,10 +109,10 @@ const addEmployee = async () => {
     case "Product Designer":
       break;
     default:
-      return exit();
-  }
+      return;
+  };
 
-  employee.role_id = roleID;
+  employee.role_id = roleID.choices;
 
   const { managerID } = await prompt({
     type: "list",
@@ -119,7 +121,7 @@ const addEmployee = async () => {
     choices: ["Abby Adams", "Barbara Bobs", "Carly Charles", "Denise Dennis"],
   });
 
-  employee.manager_id = managerID;
+  employee.manager_id = managerID.choices;
 
   await db.addEmployee(employee);
   console.log(
@@ -152,5 +154,4 @@ start();
 
 connection.connect((err) => {
   if (err) throw err;
-  console.log(`Connected as ID ${connection.threadId}\n`);
 });
