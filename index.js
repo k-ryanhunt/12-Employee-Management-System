@@ -1,5 +1,6 @@
 const { prompt } = require("inquirer");
-const db = require("./develop");
+const db = require("./db")
+require('console.table');
 
 const start = async () => {
   const { task } = await prompt({
@@ -114,7 +115,7 @@ const addEmployee = async () => {
 
   await db.addEmployee(employee);
   console.log(
-    `added ${employee.first_name} ${employee.last_name} as new employee`
+    `Added ${employee.first_name} ${employee.last_name} as a new employee!`
   );
 
   start();
@@ -129,7 +130,7 @@ const addDepartment = async () => {
   });
 
   await db.addDepartment(department);
-  console.log(`added ${department.name} as new department`);
+  console.log(`Added ${department.name} as a new department!`);
 
   start();
 };
