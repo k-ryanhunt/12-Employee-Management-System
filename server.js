@@ -99,29 +99,32 @@ const addEmployee = async () => {
       ],
     },
   ]);
-  switch (roles) {
+  switch (roleID) {
     case "Senior Developer":
+      managerID();
       break;
     case "Junior Developer":
+      managerID();
       break;
     case "Project Manager":
+      managerID();
       break;
     case "Product Designer":
+      managerID();
       break;
     default:
       return;
-  };
+  }
 
   employee.role_id = roleID.choices;
 
-  const { managerID } = await prompt({
-    type: "list",
-    name: "managerID",
-    message: "Who is the new employee's manager?",
-    choices: ["Abby Adams", "Barbara Bobs", "Carly Charles", "Denise Dennis"],
-  });
-
-  employee.manager_id = managerID.choices;
+    const { managerID } = await prompt({
+      type: "list",
+      name: "managerID",
+      message: "Who is the new employee's manager?",
+      choices: ["Abby Adams", "Barbara Bobs", "Carly Charles", "Denise Dennis"],
+    });
+    employee.manager_id = managerID.choices;
 
   await db.addEmployee(employee);
   console.log(
