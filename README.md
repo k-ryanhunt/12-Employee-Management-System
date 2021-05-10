@@ -10,6 +10,10 @@ Build a command-line application that at a minimum allows the user to:
 
   * Update employee roles
 
+## How did I do it?
+
+I created a database with employee, role, and department information in MySQL Workbench. I then got my server connected to the database and tied everything together with Node.js
+
 ## Installation
 
 * Express
@@ -18,3 +22,10 @@ Build a command-line application that at a minimum allows the user to:
 * Inquirer
 * Util
 
+## Contributors
+
+Kelsea Hunt
+
+## Video of Application
+
+![GIF](assets/GIF.gif)
