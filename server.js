@@ -21,6 +21,7 @@ const start = async () => {
       "View All Roles",
       "View All Departments",
       "Add Employee",
+      "Add Role",
       "Add Department",
       "Update Employee Role",
       "Exit",
@@ -38,6 +39,9 @@ const start = async () => {
       break;
     case "Add Employee":
       addEmployee();
+      break;
+    case "Add Role":
+      addRole();
       break;
     case "Add Department":
       addDepartment();
@@ -118,18 +122,30 @@ const addEmployee = async () => {
 
   employee.role_id = roleID.choices;
 
-    const { managerID } = await prompt({
-      type: "list",
-      name: "managerID",
-      message: "Who is the new employee's manager?",
-      choices: ["Abby Adams", "Barbara Bobs", "Carly Charles", "Denise Dennis"],
-    });
-    employee.manager_id = managerID.choices;
+  const { managerID } = await prompt({
+    type: "list",
+    name: "managerID",
+    message: "Who is the new employee's manager?",
+    choices: ["Abby Adams", "Barbara Bobs", "Carly Charles", "Denise Dennis"],
+  });
+  employee.manager_id = managerID.choices;
 
   await db.addEmployee(employee);
   console.log(
     `Added ${employee.first_name} ${employee.last_name} as a new employee!`
   );
+
+  start();
+};
+
+const addRole = async () => {
+  const role = await prompt({
+    name: "title",
+    message: "What is the name of the new role?",
+  });
+
+  await db.addRole(role);
+  console.log(`Added ${role.title} as a new role!`);
 
   start();
 };
